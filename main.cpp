@@ -19,12 +19,12 @@ vector<int> read() {
     return data;
 }
 
-int maxDivisiblePerfectSquare(int n) {
+long int maxDivisiblePerfectSquare(long int n) {
     double sqrtOfN;
     sqrtOfN = sqrt(n);
     // cout << sqrtOfN << endl;
-    vector<int> workingSquares;
-    for(int i = 1; i < sqrtOfN+1; i++) {
+    vector<long int> workingSquares;
+    for(long int i = 1; i < sqrtOfN+1; i++) {
         // cout << "i = " <<  i << endl;
         // cout << "i*i = " << i*i << endl;
         if(n%(i*i)==0) {
@@ -40,9 +40,9 @@ int maxDivisiblePerfectSquare(int n) {
     return 0;
 }
 
-int S(int n) {
-    int total = 0;
-    for(int i = 1; i < n+1; i++) {
+long int S(long int n) {
+    long int total = 0;
+    for(long int i = 1; i < n+1; i++) {
         total += maxDivisiblePerfectSquare(i);
     }
     return total;
