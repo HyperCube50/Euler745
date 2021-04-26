@@ -43,21 +43,18 @@ int maxDivisiblePerfectSquare(int n) {
 int S(int n) {
     int total = 0;
     for(int i = 1; i < n+1; i++) {
-        cout << i << endl;
-        cout << maxDivisiblePerfectSquare(i) << endl;
         total += maxDivisiblePerfectSquare(i);
-        cout << total << endl << endl;
     }
     return total;
 }
 int main() {
-    vector<int> primeslist;
-    primeslist = read();
     auto start = high_resolution_clock::now();
-    cout << maxDivisiblePerfectSquare(100) << endl;
+    // cout << maxDivisiblePerfectSquare(100) << endl;
+    cout << S(100000000000000) << endl;
+
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end - start);
     cout << duration.count() << endl;
-    //cout << S(100) << endl;
     return 0;
 }
