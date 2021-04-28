@@ -1,14 +1,14 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <fstream>
+/*#include <fstream>
 #include <sstream>
-#include <iterator>
+#include <iterator>*/
 #include <algorithm>
 #include <chrono>
 using namespace std::chrono;
 using namespace std;
-
+/*
 vector<int> read() {
     ifstream fin("../primes.txt");
     vector<int> data;
@@ -18,14 +18,14 @@ vector<int> read() {
     }
     return data;
 }
-
-long int maxDivisiblePerfectSquare(long int n) {
+*/
+unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
     long double sqrtOfN;
     sqrtOfN = sqrt(n);
-    vector<long int> workingSquares;
+    vector<unsigned long long int> workingSquares;
 
-    for (long int i = round(sqrtOfN); i >= 1; i--) {
-        long int square = i * i;
+    for (unsigned long long int i = round(sqrtOfN); i >= 1; i--) {
+        unsigned long long int square = i * i;
         if (n % square == 0) {
             workingSquares.push_back(square);
         }
@@ -34,9 +34,9 @@ long int maxDivisiblePerfectSquare(long int n) {
     return workingSquares.front();
 }
 
-long int S(long int n) {
-    long int total = 0;
-    for(long int i = 1; i < n+1; i++) {
+unsigned long long int S(unsigned long long int n) {
+    unsigned long long int total = 0;
+    for(unsigned long long int i = 1; i < n+1; i++) {
         auto start = high_resolution_clock::now();
         total += maxDivisiblePerfectSquare(i);
         auto end = high_resolution_clock::now();
@@ -45,7 +45,7 @@ long int S(long int n) {
     }
     return total;
 }
-
+/*
 void fullTest(){
     int totalTime, totalTimeAverage;
     totalTime = 0;
@@ -62,7 +62,7 @@ void fullTest(){
     totalTimeAverage = totalTime / 100;
     cout << "totalTime Average = " << totalTimeAverage << endl;
 }
-
+*/
 int main() {
     cout << S(100000000000000) << endl;
     return 0;
