@@ -41,7 +41,7 @@ unsigned long long int S(unsigned long long int n) {
         total += maxDivisiblePerfectSquare(i);
         auto end = high_resolution_clock::now();
         auto duration = duration_cast<microseconds>(end - start);
-        cout << i << " took " << duration.count() << endl;
+        cout << i << " " << duration.count() << endl;
     }
     return total;
 }
