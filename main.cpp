@@ -20,24 +20,18 @@ vector<int> read() {
 }
 
 long int maxDivisiblePerfectSquare(long int n) {
-    double sqrtOfN;
+    long double sqrtOfN;
     sqrtOfN = sqrt(n);
-    // cout << sqrtOfN << endl;
     vector<long int> workingSquares;
-    for(long int i = 1; i < sqrtOfN+1; i++) {
-        // cout << "i = " <<  i << endl;
-        // cout << "i*i = " << i*i << endl;
-        if(n%(i*i)==0) {
-            workingSquares.push_back((i*i));
-            // cout << "working" << endl;
+
+    for (long int i = round(sqrtOfN); i >= 1; i--) {
+        long int square = i * i;
+        if (n % square == 0) {
+            workingSquares.push_back(square);
         }
-        if(i >= sqrtOfN) {
-            // cout << workingSquares.back() << " is the end of the vector..." << endl;
-            return workingSquares.back();
-        }
+
     }
-    cout << "if we got this far, shit is fucked up" << endl;
-    return 0;
+    return workingSquares.front();
 }
 
 long int S(long int n) {
@@ -47,14 +41,25 @@ long int S(long int n) {
     }
     return total;
 }
+
+void fullTest(){
+    int totalTime, totalTimeAverage;
+    totalTime = 0;
+    for(int i = 0; i < 100; i++) {
+        auto start = high_resolution_clock::now();
+        // cout << maxDivisiblePerfectSquare(100000000000000) << endl;
+        cout << "S " << S(10000) << endl;
+
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);
+        cout << "runtime = " << duration.count() << endl;
+        totalTime += duration.count();
+    }
+    totalTimeAverage = totalTime / 100;
+    cout << "totalTime Average = " << totalTimeAverage << endl;
+}
+
 int main() {
-    auto start = high_resolution_clock::now();
-    // cout << maxDivisiblePerfectSquare(100) << endl;
-    cout << S(100000000000000) << endl;
-
-
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(end - start);
-    cout << duration.count() << endl;
+    cout << "S " << S(10000) << endl;
     return 0;
 }
