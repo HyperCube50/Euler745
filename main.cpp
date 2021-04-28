@@ -37,7 +37,11 @@ long int maxDivisiblePerfectSquare(long int n) {
 long int S(long int n) {
     long int total = 0;
     for(long int i = 1; i < n+1; i++) {
+        auto start = high_resolution_clock::now();
         total += maxDivisiblePerfectSquare(i);
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);
+        cout << i << " took " << duration.count() << endl;
     }
     return total;
 }
@@ -60,6 +64,6 @@ void fullTest(){
 }
 
 int main() {
-    cout << "S " << S(10000) << endl;
+    cout << S(100000000000000) << endl;
     return 0;
 }
