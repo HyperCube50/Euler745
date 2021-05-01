@@ -1,13 +1,23 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-/*#include <fstream>
+#include <fstream>
 #include <sstream>
-#include <iterator>*/
+#include <iterator>
 #include <algorithm>
 #include <chrono>
 using namespace std::chrono;
 using namespace std;
+
+void write(std::vector<int> v) {
+    std::ofstream file;
+    file.open("../text.txt");
+    for(int i=0;i<v.size();++i) {
+        file<<v[i]<<std::endl;
+    }
+    file.close();
+}
+
 /*
 vector<int> read() {
     ifstream fin("../primes.txt");
@@ -36,15 +46,16 @@ unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
 
 unsigned long long int S(unsigned long long int n) {
     unsigned long long int total = 0;
+    vector<int> graphables;
     for(unsigned long long int i = 1; i < n+1; i++) {
-        auto start = high_resolution_clock::now();
-        total += maxDivisiblePerfectSquare(i);
-        auto end = high_resolution_clock::now();
-        auto duration = duration_cast<microseconds>(end - start);
-        cout << i << " " << duration.count() << endl;
+        int b = maxDivisiblePerfectSquare(i);
+        total += b;
+        graphables.push_back(b);
     }
+    write(graphables);
     return total;
 }
+
 /*
 void fullTest(){
     int totalTime, totalTimeAverage;
@@ -64,6 +75,10 @@ void fullTest(){
 }
 */
 int main() {
-    cout << S(100000000000000) << endl;
+    auto start = high_resolution_clock::now();
+    cout << S(10000) << endl;
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << duration.count() << endl;
     return 0;
 }
