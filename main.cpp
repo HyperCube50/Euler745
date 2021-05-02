@@ -54,7 +54,7 @@ unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
     return workingSquares.front();
 }
 
-void threadObject(int threadI, int n) {
+void threadObject(unsigned long long int threadI, unsigned long long int n) {
 	for(unsigned long long int i = threadI; i < n+1; i++) {
 		//auto start = high_resolution_clock::now();
 		unsigned long long int b = maxDivisiblePerfectSquare(i);
@@ -90,9 +90,9 @@ int main() {
     auto start = high_resolution_clock::now();
 
     unsigned long long int threadN;
-    int extra;
-    int bigN;
-    bigN = 1000000;
+    unsigned long long int extra;
+    unsigned long long int bigN;
+    bigN = 10000000000;
 	// divide by 12 for the twelve threads
 	threadN = bigN / 12;
 	extra = bigN % 12;
@@ -127,7 +127,7 @@ int main() {
 
 	// left overs
 	for(unsigned long long int i = threadN*12+1; i < threadN*12+extra+1; i++) {
-		int b = maxDivisiblePerfectSquare(i);
+		unsigned long long int b = maxDivisiblePerfectSquare(i);
 		total += b;
 	}
 

@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/duck/Code/Euler745/main.cpp
+iostream
+-
+cmath
+-
+vector
+-
+fstream
+-
+sstream
+-
+iterator
+-
+algorithm
+-
+chrono
+-
+thread
+-
+algorithm
+-
+numeric
+-
+mutex
+-
+

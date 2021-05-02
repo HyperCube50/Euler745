@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -pthread -O3 -DNDEBUG CMakeFiles/Euler745.dir/main.cpp.o -o Euler745 
