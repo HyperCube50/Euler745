@@ -14,7 +14,7 @@ using namespace std;
 using namespace std::chrono;
 using namespace std::this_thread;
 
-unsigned long long int total;
+uint64_t total;
 mutex mtx;
 
 /*void write(std::vector<int> v) {
@@ -38,77 +38,71 @@ vector<int> read() {
 }
 */
 
-unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
+vector<uint64_t> squareGen(uint64_t n) {
+	vector<uint64_t> returnSquares;
+	for (uint64_t i = 1; i*i-1 < n; i++) {
+		returnSquares.push_back(i*i);
+	}
+	return returnSquares;
+}
+
+uint64_t maxDivisiblePerfectSquare(uint64_t n, vector<uint64_t> squaresList) {
     long double sqrtOfN;
     sqrtOfN = sqrt(n);
-    vector<unsigned long long int> workingSquares;
+    vector<uint64_t> workingSquares;
 
-    for (unsigned long long int i = round(sqrtOfN); i >= 1; i--) {
-        unsigned long long int square = i * i;
-        if (n % square == 0) {
-            workingSquares.push_back(square);
+    for (uint64_t i : squaresList) {
+        if (n % i == 0) {
+            workingSquares.push_back(i);
         }
 
     }
-    return workingSquares.front();
+    return workingSquares.back();
 }
 
-void threadObject(unsigned long long int threadI, unsigned long long int n) {
-	for(unsigned long long int i = threadI; i < n+1; i++) {
+void threadObject(uint64_t threadI, uint64_t n, vector<uint64_t> squares) {
+	for(uint64_t i = threadI; i < n+1; i++) {
 		auto start = high_resolution_clock::now();
-		unsigned long long int b = maxDivisiblePerfectSquare(i);
+		uint64_t b = maxDivisiblePerfectSquare(i, squares);
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<microseconds>(end - start);
 		mtx.lock();
-		cout << i << " " << duration.count() << endl;
+		//cout << i << " " << duration.count() << endl;
 		total += b;
 		mtx.unlock();
 	}
 }
 
-/*
-void fullTest(){
-    int totalTime, totalTimeAverage;
-    totalTime = 0;
-    for(int i = 0; i < 100; i++) {
-        auto start = high_resolution_clock::now();
-        // cout << maxDivisiblePerfectSquare(100000000000000) << endl;
-        cout << "S " << S(10000) << endl;
-
-        auto end = high_resolution_clock::now();
-        auto duration = duration_cast<microseconds>(end - start);
-        cout << "runtime = " << duration.count() << endl;
-        totalTime += duration.count();
-    }
-    totalTimeAverage = totalTime / 100;
-    cout << "totalTime Average = " << totalTimeAverage << endl;
-}
-*/
 
 int main() {
     auto start = high_resolution_clock::now();
 
-    unsigned long long int threadN;
-    unsigned long long int extra;
-    unsigned long long int bigN;
-    bigN = 100000000000000;
-	// divide by 12 for the twelve threads
+    uint64_t threadN;
+    uint64_t extra;
+    uint64_t bigN;
+    vector<uint64_t> squares;
+    bigN = 1000000;
+
+    // generate squares
+    squares = squareGen(bigN);
+
+    // divide by 12 for the twelve threads
 	threadN = bigN / 12;
 	extra = bigN % 12;
 
 	// start the threads
-	thread t0   (threadObject, threadN*0 +1, threadN);
-	thread t1   (threadObject, threadN*1 +1, threadN*2);
-	thread t2   (threadObject, threadN*2 +1, threadN*3);
-	thread t3   (threadObject, threadN*3 +1, threadN*4);
-	thread t4   (threadObject, threadN*4 +1, threadN*5);
-	thread t5   (threadObject, threadN*5 +1, threadN*6);
-	thread t6   (threadObject, threadN*6 +1, threadN*7);
-	thread t7   (threadObject, threadN*7 +1, threadN*8);
-	thread t8   (threadObject, threadN*8 +1, threadN*9);
-	thread t9   (threadObject, threadN*9 +1, threadN*10);
-	thread t10  (threadObject, threadN*10+1, threadN*11);
-	thread t11  (threadObject, threadN*11+1, threadN*12);
+	thread t0   (threadObject, threadN*0 +1, threadN, squares);
+	thread t1   (threadObject, threadN*1 +1, threadN*2, squares);
+	thread t2   (threadObject, threadN*2 +1, threadN*3, squares);
+	thread t3   (threadObject, threadN*3 +1, threadN*4, squares);
+	thread t4   (threadObject, threadN*4 +1, threadN*5, squares);
+	thread t5   (threadObject, threadN*5 +1, threadN*6, squares);
+	thread t6   (threadObject, threadN*6 +1, threadN*7, squares);
+	thread t7   (threadObject, threadN*7 +1, threadN*8, squares);
+	thread t8   (threadObject, threadN*8 +1, threadN*9, squares);
+	thread t9   (threadObject, threadN*9 +1, threadN*10, squares);
+	thread t10  (threadObject, threadN*10+1, threadN*11, squares);
+	thread t11  (threadObject, threadN*11+1, threadN*12, squares);
 
 	// wait for them to finish
 	t0 .join();
@@ -125,8 +119,8 @@ int main() {
 	t11.join();
 
 	// left overs
-	for(unsigned long long int i = threadN*12+1; i < threadN*12+extra+1; i++) {
-		unsigned long long int b = maxDivisiblePerfectSquare(i);
+	for(uint64_t i = threadN*12+1; i < threadN*12+extra+1; i++) {
+		uint64_t b = maxDivisiblePerfectSquare(i, squares);
 		total += b;
 	}
 
