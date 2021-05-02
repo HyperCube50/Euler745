@@ -6,17 +6,26 @@
 #include <iterator>
 #include <algorithm>
 #include <chrono>
-using namespace std::chrono;
+#include <thread>
+#include <algorithm>
+#include <numeric>
+#include <mutex>
 using namespace std;
+using namespace std::chrono;
+using namespace std::this_thread;
 
-void write(std::vector<int> v) {
+unsigned long long int total;
+mutex mtx;
+
+
+/*void write(std::vector<int> v) {
     std::ofstream file;
     file.open("../text.txt");
     for(int i=0;i<v.size();++i) {
         file<<v[i]<<std::endl;
     }
     file.close();
-}
+}*/
 
 /*
 vector<int> read() {
@@ -29,6 +38,7 @@ vector<int> read() {
     return data;
 }
 */
+
 unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
     long double sqrtOfN;
     sqrtOfN = sqrt(n);
@@ -44,17 +54,17 @@ unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
     return workingSquares.front();
 }
 
-unsigned long long int S(unsigned long long int n) {
-    unsigned long long int total = 0;
-    for(unsigned long long int i = 1; i < n+1; i++) {
-	    auto start = high_resolution_clock::now();
-	    int b = maxDivisiblePerfectSquare(i);
-	    auto end = high_resolution_clock::now();
-	    auto duration = duration_cast<microseconds>(end - start);
-	    cout << "small duration " << duration.count() << endl;
-        total += b;
-    }
-    return total;
+void threadObject(int threadI, int n) {
+	for(unsigned long long int i = threadI; i < n+1; i++) {
+		//auto start = high_resolution_clock::now();
+		unsigned long long int b = maxDivisiblePerfectSquare(i);
+		//auto end = high_resolution_clock::now();
+		//auto duration = duration_cast<microseconds>(end - start);
+		//cout << "small duration " << duration.count() << endl;
+		mtx.lock();
+		total += b;
+		mtx.unlock();
+	}
 }
 
 /*
@@ -75,11 +85,56 @@ void fullTest(){
     cout << "totalTime Average = " << totalTimeAverage << endl;
 }
 */
+
 int main() {
     auto start = high_resolution_clock::now();
-    cout << S(1000000) << endl;
+
+    unsigned long long int threadN;
+    int extra;
+    int bigN;
+    bigN = 1000000;
+	// divide by 12 for the twelve threads
+	threadN = bigN / 12;
+	extra = bigN % 12;
+
+	// start the threads
+	thread t0   (threadObject, threadN*0 +1, threadN);
+	thread t1   (threadObject, threadN*1 +1, threadN*2);
+	thread t2   (threadObject, threadN*2 +1, threadN*3);
+	thread t3   (threadObject, threadN*3 +1, threadN*4);
+	thread t4   (threadObject, threadN*4 +1, threadN*5);
+	thread t5   (threadObject, threadN*5 +1, threadN*6);
+	thread t6   (threadObject, threadN*6 +1, threadN*7);
+	thread t7   (threadObject, threadN*7 +1, threadN*8);
+	thread t8   (threadObject, threadN*8 +1, threadN*9);
+	thread t9   (threadObject, threadN*9 +1, threadN*10);
+	thread t10  (threadObject, threadN*10+1, threadN*11);
+	thread t11  (threadObject, threadN*11+1, threadN*12);
+
+	// wait for them to finish
+	t0 .join();
+	t1 .join();
+	t2 .join();
+	t3 .join();
+	t4 .join();
+	t5 .join();
+	t6 .join();
+	t7 .join();
+	t8 .join();
+	t9 .join();
+	t10.join();
+	t11.join();
+
+	// left overs
+	for(unsigned long long int i = threadN*12+1; i < threadN*12+extra+1; i++) {
+		int b = maxDivisiblePerfectSquare(i);
+		total += b;
+	}
+
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end - start);
+    cout << "total = " << total << endl;
     cout << "total duration " << duration.count() << endl;
     return 0;
 }
