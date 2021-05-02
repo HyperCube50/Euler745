@@ -60,7 +60,7 @@ void threadObject(unsigned long long int threadI, unsigned long long int n) {
 		auto end = high_resolution_clock::now();
 		auto duration = duration_cast<microseconds>(end - start);
 		mtx.lock();
-		cout << duration.count() << endl;
+		cout << i << " " << duration.count() << endl;
 		total += b;
 		mtx.unlock();
 	}
