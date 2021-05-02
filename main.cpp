@@ -46,13 +46,14 @@ unsigned long long int maxDivisiblePerfectSquare(unsigned long long int n) {
 
 unsigned long long int S(unsigned long long int n) {
     unsigned long long int total = 0;
-    vector<int> graphables;
     for(unsigned long long int i = 1; i < n+1; i++) {
-        int b = maxDivisiblePerfectSquare(i);
+	    auto start = high_resolution_clock::now();
+	    int b = maxDivisiblePerfectSquare(i);
+	    auto end = high_resolution_clock::now();
+	    auto duration = duration_cast<microseconds>(end - start);
+	    cout << "small duration " << duration.count() << endl;
         total += b;
-        graphables.push_back(b);
     }
-    write(graphables);
     return total;
 }
 
@@ -76,9 +77,9 @@ void fullTest(){
 */
 int main() {
     auto start = high_resolution_clock::now();
-    cout << S(10000) << endl;
+    cout << S(1000000) << endl;
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end - start);
-    cout << duration.count() << endl;
+    cout << "total duration " << duration.count() << endl;
     return 0;
 }
