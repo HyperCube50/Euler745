@@ -17,7 +17,6 @@ using namespace std::this_thread;
 unsigned long long int total;
 mutex mtx;
 
-
 /*void write(std::vector<int> v) {
     std::ofstream file;
     file.open("../text.txt");
@@ -92,7 +91,7 @@ int main() {
     unsigned long long int threadN;
     unsigned long long int extra;
     unsigned long long int bigN;
-    bigN = 10000000000;
+    bigN = 1000000;
 	// divide by 12 for the twelve threads
 	threadN = bigN / 12;
 	extra = bigN % 12;
